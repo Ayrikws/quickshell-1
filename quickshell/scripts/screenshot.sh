@@ -314,7 +314,7 @@ fi
 # ---------------------------------------------------------
 # PHASE 2: UI Trigger (Launch Standalone Quickshell Overlay)
 # ---------------------------------------------------------
-QML_PATH="$HOME/.config/hypr/scripts/quickshell/ScreenshotOverlay.qml"
+QML_PATH="$HOME/.config/quickshell/scripts/ScreenshotOverlay.qml"
 
 if pgrep -f "quickshell -p $QML_PATH" > /dev/null; then
     pkill -f "quickshell -p $QML_PATH"
