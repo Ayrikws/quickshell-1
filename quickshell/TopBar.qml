@@ -421,7 +421,7 @@ onMusicDataChanged: {
                 }
 
                 Process {
-                    id: kbPoller; running: true
+                    id: kbPoller; running: false
                     command: ["bash", "-c", "~/.config/quickshell/watchers/kb_fetch.sh"]
                     stdout: StdioCollector {
                         onStreamFinished: {
