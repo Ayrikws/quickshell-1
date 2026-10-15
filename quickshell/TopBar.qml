@@ -152,7 +152,7 @@ Item {
                             
                 Process {
                     id: settingsReader
-                    command: ["bash", "-c", "cat ~/.config/nypr/settings.json 2>/dev/null || echo '{}'"]
+                    command: ["bash", "-c", "cat ~/.config/hypr/settings.json 2>/dev/null || echo '{}'"]
                     running: true
                     stdout: StdioCollector {
                         onStreamFinished: {
@@ -323,17 +323,27 @@ onMusicDataChanged: {
                     }
                 }
 
-                Process {
-                    id: wsWatcher
-                    running: true
-                    command: ["bash", "-c", "inotifywait -qq -e close_write,modify " + paths.getRunDir("workspaces") + "/workspaces.json"]
-                    onExited: {
-                        wsReader.running = false;
-                        wsReader.running = true;
-                        running = false;
-                        running = true;
-                    }
-                }
+Process {
+    id: wsWatcher
+    running: true
+    command: [
+        "bash", "-c",
+        "mkdir -p " + paths.getRunDir("workspaces") +
+        "; while inotifywait -qq -e moved_to,close_write " +
+        paths.getRunDir("workspaces") +
+        "; do " +
+        "if [ -f " + paths.getRunDir("workspaces") +
+        "/workspaces.json ]; then exit 0; fi; " +
+        "done"
+    ]
+
+    onExited: {
+        wsReader.running = false;
+        wsReader.running = true;
+        running = false;
+        running = true;
+    }
+}
 
                 Process {
                     id: musicForceRefresh
